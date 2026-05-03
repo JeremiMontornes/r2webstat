@@ -29,6 +29,72 @@ ws_set_api_key <- function(api_key) {
   invisible(old)
 }
 
+#' Save a Webstat API key for future R sessions
+#'
+#' This writes `WEBSTAT_API_KEY` to the user-level `.Renviron` file so the
+#' package can find it automatically when R starts. The key is not stored in
+#' the package source code.
+#'
+#' @param api_key API key obtained from the Webstat API portal.
+#' @param overwrite If `FALSE`, stop when `WEBSTAT_API_KEY` already exists in
+#'   `.Renviron`.
+#' @param renviron Path to the `.Renviron` file. Defaults to the user-level
+#'   file returned by `path.expand("~/.Renviron")`.
+#'
+#' @return The path to the updated `.Renviron` file, invisibly.
+#' @export
+ws_save_api_key <- function(api_key, overwrite = FALSE,
+                            renviron = path.expand("~/.Renviron")) {
+  stopifnot(is.character(api_key), length(api_key) == 1, nzchar(api_key))
+  stopifnot(is.logical(overwrite), length(overwrite) == 1)
+  stopifnot(is.character(renviron), length(renviron) == 1)
+
+  lines <- if (file.exists(renviron)) {
+    readLines(renviron, warn = FALSE)
+  } else {
+    character()
+  }
+
+  has_key <- grepl("^\\s*WEBSTAT_API_KEY\\s*=", lines)
+  if (any(has_key) && !isTRUE(overwrite)) {
+    stop(
+      "`WEBSTAT_API_KEY` already exists in ", renviron,
+      ". Use `overwrite = TRUE` to replace it.",
+      call. = FALSE
+    )
+  }
+
+  new_line <- paste0("WEBSTAT_API_KEY=", renviron_quote(api_key))
+  if (any(has_key)) {
+    lines[has_key] <- new_line
+  } else {
+    lines <- c(lines, new_line)
+  }
+
+  dir.create(dirname(renviron), recursive = TRUE, showWarnings = FALSE)
+  writeLines(lines, renviron, useBytes = TRUE)
+  Sys.setenv(WEBSTAT_API_KEY = api_key)
+  invisible(renviron)
+}
+
+#' Check whether a Webstat API key is available
+#'
+#' @return `TRUE` when `WEBSTAT_API_KEY` is set for the current R session.
+#' @export
+ws_has_api_key <- function() {
+  nzchar(Sys.getenv("WEBSTAT_API_KEY", ""))
+}
+
+renviron_quote <- function(x) {
+  if (grepl("[[:space:]#'\"]", x)) {
+    x <- gsub("\\\\", "\\\\\\\\", x)
+    x <- gsub('"', '\\"', x, fixed = TRUE)
+    paste0('"', x, '"')
+  } else {
+    x
+  }
+}
+
 #' Build a Webstat Explore API URL
 #'
 #' @param path API path, for example `"catalog/datasets/series/records"`.

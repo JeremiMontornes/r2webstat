@@ -14,19 +14,25 @@ The package currently exposes:
 
 Some Webstat business datasets, including `series`, `observations`, and
 `webstat-datasets`, may require a Webstat API key attached to your account.
-Set it once per R session:
+Save it once on your machine:
 
 ```r
 library(r2webstat)
 
-ws_set_api_key("your-api-key")
-# or set WEBSTAT_API_KEY in .Renviron
+ws_save_api_key("your-api-key")
+ws_has_api_key()
 ```
+
+Restart R after saving the key. For temporary use in the current session only,
+use `ws_set_api_key("your-api-key")`.
 
 ## Examples
 
 ```r
 library(r2webstat)
+
+# If you have not saved the key yet:
+# ws_save_api_key("your-api-key")
 
 # Explore catalog visible to your key/session
 ws_catalog(limit = 5)
