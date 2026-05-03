@@ -57,6 +57,8 @@ webstat_get_all <- function(path, query = list(), api_key = NULL,
                             base_url = webstat_base_url(), page_size = 100,
                             max_pages = Inf) {
   page_size <- check_limit(page_size, maximum = 100)
+  query$limit <- NULL
+  query$offset <- NULL
   out <- list()
   offset <- 0L
   page <- 0L
