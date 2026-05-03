@@ -6,15 +6,51 @@ webstat_get <- function(path, query = list(), api_key = NULL,
     req,
     "r2webstat (https://github.com/JeremiMontornes/r2webstat)"
   )
+  req <- httr2::req_error(req, is_error = function(resp) FALSE)
   resp <- httr2::req_perform(req)
 
   if (httr2::resp_status(resp) >= 400) {
-    msg <- httr2::resp_body_string(resp)
-    stop("Webstat API request failed: HTTP ", httr2::resp_status(resp), "\n", msg,
-         call. = FALSE)
+    stop(webstat_error_message(resp, path), call. = FALSE)
   }
 
   httr2::resp_body_json(resp, simplifyVector = FALSE)
+}
+
+webstat_error_message <- function(resp, path) {
+  status <- httr2::resp_status(resp)
+  body <- httr2::resp_body_string(resp)
+  parsed <- tryCatch(
+    httr2::resp_body_json(resp, simplifyVector = TRUE),
+    error = function(e) NULL
+  )
+
+  message <- if (is.list(parsed) && !is.null(parsed$message)) {
+    parsed$message
+  } else if (nzchar(body)) {
+    body
+  } else {
+    httr2::resp_status_desc(resp)
+  }
+
+  code <- if (is.list(parsed) && !is.null(parsed$error_code)) {
+    paste0(" (", parsed$error_code, ")")
+  } else {
+    ""
+  }
+
+  hint <- ""
+  if (status %in% c(401, 403, 404) &&
+      grepl("catalog/datasets/(series|observations|webstat-datasets)", path)) {
+    hint <- paste0(
+      "\n\nThe Webstat business datasets `series`, `observations`, and ",
+      "`webstat-datasets` may require a Webstat API key with the right ",
+      "authorization. Set it with `ws_set_api_key()` or the `WEBSTAT_API_KEY` ",
+      "environment variable. You can still test the package without a key with ",
+      "`ws_catalog()` and `ws_records(\"tableaux_rapports_preetablis\")`."
+    )
+  }
+
+  paste0("Webstat API request failed: HTTP ", status, code, "\n", message, hint)
 }
 
 webstat_get_all <- function(path, query = list(), api_key = NULL,
