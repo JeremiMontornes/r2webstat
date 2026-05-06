@@ -33,6 +33,7 @@ use `ws_set_api_key("your-api-key")`.
 
 ```r
 library(r2webstat)
+library(ggplot2)
 
 # Optional: use your own key instead of the package fallback
 # ws_save_api_key("your-api-key")
@@ -52,19 +53,18 @@ obs <- ws_observations(
 )
 
 df <- data.frame(
-  date = as.Date(vapply(obs, function(x) x[["time_period_end"]], character(1))),
-  value = as.numeric(vapply(obs, function(x) x[["obs_value"]], numeric(1)))
+  date = as.Date(sapply(obs, \(x) x$time_period_end)),
+  value = as.numeric(sapply(obs, \(x) x$obs_value))
 )
 
-plot(
-  df$date,
-  df$value,
-  type = "l",
-  lwd = 2,
-  xlab = "",
-  ylab = "USD per EUR",
-  main = "EXR.M.USD.EUR.SP00.A"
-)
+ggplot(df, aes(date, value)) +
+  geom_line(linewidth = 0.8, colour = "#1f77b4") +
+  labs(
+    title = "EXR.M.USD.EUR.SP00.A",
+    x = NULL,
+    y = "USD per EUR"
+  ) +
+  theme_minimal()
 
 # Create an export URL
 url <- ws_export_url(

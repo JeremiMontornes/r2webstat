@@ -18,5 +18,6 @@ Depends:
 Imports:
     httr2
 Suggests:
+    ggplot2,
     testthat (>= 3.0.0)
 Config/testthat/edition: 3
