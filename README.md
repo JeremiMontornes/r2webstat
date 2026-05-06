@@ -51,6 +51,21 @@ obs <- ws_observations(
   all = TRUE
 )
 
+df <- data.frame(
+  date = as.Date(vapply(obs, function(x) x[["time_period_end"]], character(1))),
+  value = as.numeric(vapply(obs, function(x) x[["obs_value"]], numeric(1)))
+)
+
+plot(
+  df$date,
+  df$value,
+  type = "l",
+  lwd = 2,
+  xlab = "",
+  ylab = "USD per EUR",
+  main = "EXR.M.USD.EUR.SP00.A"
+)
+
 # Create an export URL
 url <- ws_export_url(
   "observations",
@@ -59,6 +74,8 @@ url <- ws_export_url(
   limit = -1
 )
 ```
+
+![Example Webstat series](man/figures/exr_usd_eur.png)
 
 ## Notes on the new Webstat API
 
