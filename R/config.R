@@ -10,10 +10,26 @@ webstat_api_key <- function(api_key = NULL) {
 
   key <- Sys.getenv("WEBSTAT_API_KEY", "")
   if (nzchar(key)) {
-    key
-  } else {
-    NULL
+    return(key)
   }
+
+  key <- webstat_builtin_api_key()
+  if (!is.null(key) && nzchar(key)) {
+    return(key)
+  }
+
+  NULL
+}
+
+webstat_builtin_api_key <- function() {
+  key <- getOption("r2webstat.api_key", "")
+  if (is.character(key) && length(key) == 1 && nzchar(key)) {
+    return(key)
+  }
+
+  # Public browser key used by the official Webstat portal for anonymous
+  # frontend API calls. Users can still override it with WEBSTAT_API_KEY.
+  "a78150367a35332580ae1651b4023f0c333e99b6653821d6ac445af9"
 }
 
 #' Set a Webstat API key for the current R session
@@ -79,10 +95,18 @@ ws_save_api_key <- function(api_key, overwrite = FALSE,
 
 #' Check whether a Webstat API key is available
 #'
-#' @return `TRUE` when `WEBSTAT_API_KEY` is set for the current R session.
+#' @param include_builtin If `TRUE`, also count the package-level fallback key
+#'   when one is bundled.
+#'
+#' @return `TRUE` when a key is available for the current R session.
 #' @export
-ws_has_api_key <- function() {
-  nzchar(Sys.getenv("WEBSTAT_API_KEY", ""))
+ws_has_api_key <- function(include_builtin = TRUE) {
+  has_user_key <- nzchar(Sys.getenv("WEBSTAT_API_KEY", ""))
+  if (has_user_key) {
+    return(TRUE)
+  }
+
+  isTRUE(include_builtin) && !is.null(webstat_builtin_api_key())
 }
 
 renviron_quote <- function(x) {
@@ -99,20 +123,25 @@ renviron_quote <- function(x) {
 #'
 #' @param path API path, for example `"catalog/datasets/series/records"`.
 #' @param query Named list of query parameters.
-#' @param api_key Optional API key. Defaults to `WEBSTAT_API_KEY`.
+#' @param api_key Optional API key. Defaults to `WEBSTAT_API_KEY`, then to the
+#'   package fallback key.
 #' @param base_url Base API URL. Defaults to Webstat Explore v2.1.
+#' @param include_api_key If `TRUE`, include the API key as an `apikey` query
+#'   parameter. Internal package requests use an HTTP `Authorization` header
+#'   instead.
 #'
 #' @return A character URL.
 #' @export
 ws_api_url <- function(path = "", query = list(), api_key = NULL,
-                       base_url = webstat_base_url()) {
+                       base_url = webstat_base_url(),
+                       include_api_key = TRUE) {
   stopifnot(is.character(path), length(path) == 1)
   path <- sub("^/+", "", path)
   url <- paste0(sub("/+$", "", base_url), if (nzchar(path)) paste0("/", path) else "")
   query <- compact_query(query)
 
   key <- webstat_api_key(api_key)
-  if (!is.null(key)) {
+  if (isTRUE(include_api_key) && !is.null(key)) {
     query$apikey <- key
   }
 

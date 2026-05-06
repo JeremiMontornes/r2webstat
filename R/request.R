@@ -1,11 +1,21 @@
 webstat_get <- function(path, query = list(), api_key = NULL,
                         base_url = webstat_base_url()) {
-  url <- ws_api_url(path, query = query, api_key = api_key, base_url = base_url)
+  key <- webstat_api_key(api_key)
+  url <- ws_api_url(
+    path,
+    query = query,
+    api_key = NULL,
+    base_url = base_url,
+    include_api_key = FALSE
+  )
   req <- httr2::request(url)
   req <- httr2::req_user_agent(
     req,
     "r2webstat (https://github.com/JeremiMontornes/r2webstat)"
   )
+  if (!is.null(key)) {
+    req <- httr2::req_headers(req, Authorization = paste("Apikey", key))
+  }
   req <- httr2::req_error(req, is_error = function(resp) FALSE)
   resp <- httr2::req_perform(req)
 

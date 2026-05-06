@@ -9,10 +9,35 @@ test_that("ws_has_api_key reflects the environment", {
   })
 
   Sys.unsetenv("WEBSTAT_API_KEY")
-  expect_false(ws_has_api_key())
+  expect_true(ws_has_api_key())
+  expect_false(ws_has_api_key(include_builtin = FALSE))
 
   Sys.setenv(WEBSTAT_API_KEY = "abc")
   expect_true(ws_has_api_key())
+})
+
+test_that("webstat_api_key uses package fallback only after user keys", {
+  old <- Sys.getenv("WEBSTAT_API_KEY", NA_character_)
+  on.exit({
+    if (is.na(old)) {
+      Sys.unsetenv("WEBSTAT_API_KEY")
+    } else {
+      Sys.setenv(WEBSTAT_API_KEY = old)
+    }
+  })
+
+  local_mocked_bindings(
+    webstat_builtin_api_key = function() "builtin-key"
+  )
+
+  Sys.unsetenv("WEBSTAT_API_KEY")
+  expect_equal(webstat_api_key(), "builtin-key")
+  expect_true(ws_has_api_key())
+  expect_false(ws_has_api_key(include_builtin = FALSE))
+
+  Sys.setenv(WEBSTAT_API_KEY = "env-key")
+  expect_equal(webstat_api_key(), "env-key")
+  expect_equal(webstat_api_key("explicit-key"), "explicit-key")
 })
 
 test_that("ws_save_api_key writes .Renviron style entries", {
