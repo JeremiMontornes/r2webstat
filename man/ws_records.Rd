@@ -8,8 +8,11 @@
 \item{limit}{Number of records to return.}
 \item{offset}{Pagination offset.}
 \item{all}{Page through all accessible records.}
-\item{api_key}{Optional Webstat API key.}
+\item{api_key}{Optional Webstat API key. Defaults to an explicit argument,
+then `WEBSTAT_API_KEY`, then the package fallback key.}
 \item{base_url}{Base API URL.}
 }
 \value{A parsed API response or list of records.}
-\description{Query records from any accessible Huwise/Opendatasoft Explore dataset.}
+\description{Query records from any accessible Huwise/Opendatasoft Explore
+dataset. Package requests send the key with an HTTP `Authorization: Apikey ...`
+header.}

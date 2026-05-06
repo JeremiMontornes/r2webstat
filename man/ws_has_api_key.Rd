@@ -7,4 +7,5 @@
 frontend key bundled for anonymous browser-style API calls.}
 }
 \value{`TRUE` when a key is available for the current R session.}
-\description{Check whether a Webstat API key is available.}
+\description{Check whether a Webstat API key is available from the environment,
+the current R options, or the package fallback key.}

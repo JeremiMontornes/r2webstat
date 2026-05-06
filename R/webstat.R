@@ -8,7 +8,8 @@
 #' @param lang Metadata language, `"fr"` or `"en"`.
 #' @param limit Number of records to return.
 #' @param all If `TRUE`, page through all accessible records.
-#' @param api_key Optional API key. Defaults to `WEBSTAT_API_KEY`.
+#' @param api_key Optional API key. Defaults to an explicit argument, then
+#'   `WEBSTAT_API_KEY`, then the package fallback key.
 #' @param base_url Base API URL.
 #'
 #' @return A parsed API response, or a list of records when `all = TRUE`.
@@ -40,7 +41,8 @@ ws_datasets <- function(search = NULL, lang = c("fr", "en"), limit = 100,
 #' @param resource Resource type: `"series"`, `"webstat-datasets"`, or `"themes"`.
 #' @param lang Metadata language, `"fr"` or `"en"`.
 #' @param limit Number of records to return.
-#' @param api_key Optional API key. Defaults to `WEBSTAT_API_KEY`.
+#' @param api_key Optional API key. Defaults to an explicit argument, then
+#'   `WEBSTAT_API_KEY`, then the package fallback key.
 #' @param base_url Base API URL.
 #'
 #' @return A parsed API response.
@@ -73,7 +75,8 @@ ws_search <- function(query, resource = c("series", "webstat-datasets", "themes"
 #' @param limit Number of records to return.
 #' @param offset Pagination offset.
 #' @param all If `TRUE`, page through all accessible records.
-#' @param api_key Optional API key. Defaults to `WEBSTAT_API_KEY`.
+#' @param api_key Optional API key. Defaults to an explicit argument, then
+#'   `WEBSTAT_API_KEY`, then the package fallback key.
 #' @param base_url Base API URL.
 #'
 #' @return A parsed API response, or a list of records when `all = TRUE`.
@@ -110,7 +113,8 @@ ws_series <- function(series_key = NULL, dataset_id = NULL, where = NULL,
 #' @param limit Number of records to return.
 #' @param offset Pagination offset.
 #' @param all If `TRUE`, page through all accessible records.
-#' @param api_key Optional API key. Defaults to `WEBSTAT_API_KEY`.
+#' @param api_key Optional API key. Defaults to an explicit argument, then
+#'   `WEBSTAT_API_KEY`, then the package fallback key.
 #' @param base_url Base API URL.
 #'
 #' @return A parsed API response, or a list of records when `all = TRUE`.

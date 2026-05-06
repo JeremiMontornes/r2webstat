@@ -7,8 +7,10 @@
 \item{limit}{Number of datasets to return.}
 \item{offset}{Pagination offset.}
 \item{all}{Page through all accessible results.}
-\item{api_key}{Optional Webstat API key.}
+\item{api_key}{Optional Webstat API key. Defaults to an explicit argument,
+then `WEBSTAT_API_KEY`, then the package fallback key.}
 \item{base_url}{Base API URL.}
 }
 \value{A parsed API response or list of results.}
-\description{Query datasets available from the Webstat Explore catalog.}
+\description{Query datasets available from the Webstat Explore catalog. Package
+requests send the key with an HTTP `Authorization: Apikey ...` header.}

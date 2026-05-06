@@ -7,7 +7,8 @@
 #' @param select Optional ODSQL select expression.
 #' @param order_by Optional ODSQL ordering expression.
 #' @param limit Number of records to export. Use `-1` for all records.
-#' @param api_key Optional API key. Defaults to `WEBSTAT_API_KEY`.
+#' @param api_key Optional API key. Defaults to an explicit argument, then
+#'   `WEBSTAT_API_KEY`, then the package fallback key.
 #' @param base_url Base API URL.
 #' @param ... Additional query parameters passed to the export endpoint.
 #'

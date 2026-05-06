@@ -4,4 +4,5 @@
 \usage{ws_set_api_key(api_key)}
 \arguments{\item{api_key}{API key obtained from the Webstat API portal.}}
 \value{The previous value of `WEBSTAT_API_KEY`, invisibly.}
-\description{Set `WEBSTAT_API_KEY` for the current R session.}
+\description{Set `WEBSTAT_API_KEY` for the current R session. This overrides
+the package fallback key until the R session ends.}

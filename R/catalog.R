@@ -6,7 +6,8 @@
 #' @param limit Number of datasets to return.
 #' @param offset Pagination offset.
 #' @param all If `TRUE`, page through all accessible results.
-#' @param api_key Optional API key. Defaults to `WEBSTAT_API_KEY`.
+#' @param api_key Optional API key. Defaults to an explicit argument, then
+#'   `WEBSTAT_API_KEY`, then the package fallback key.
 #' @param base_url Base API URL.
 #'
 #' @return A parsed list returned by the Webstat API, or a list of results
@@ -45,7 +46,8 @@ ws_catalog <- function(where = NULL, select = NULL, order_by = NULL,
 #'   limited to 100 records per page.
 #' @param offset Pagination offset.
 #' @param all If `TRUE`, page through all accessible records.
-#' @param api_key Optional API key. Defaults to `WEBSTAT_API_KEY`.
+#' @param api_key Optional API key. Defaults to an explicit argument, then
+#'   `WEBSTAT_API_KEY`, then the package fallback key.
 #' @param base_url Base API URL.
 #'
 #' @return A parsed list returned by the Webstat API, or a list of records
@@ -80,7 +82,8 @@ ws_records <- function(dataset_id, where = NULL, select = NULL, refine = NULL,
 #'
 #' @param dataset_id Dataset identifier.
 #' @param select Optional ODSQL select expression.
-#' @param api_key Optional API key. Defaults to `WEBSTAT_API_KEY`.
+#' @param api_key Optional API key. Defaults to an explicit argument, then
+#'   `WEBSTAT_API_KEY`, then the package fallback key.
 #' @param base_url Base API URL.
 #'
 #' @return A parsed dataset metadata list.
@@ -102,7 +105,8 @@ ws_structure <- function(dataset_id, select = NULL, api_key = NULL,
 #' @param facet One or more facet fields.
 #' @param where Optional ODSQL where clause.
 #' @param refine Optional facet refinement.
-#' @param api_key Optional API key. Defaults to `WEBSTAT_API_KEY`.
+#' @param api_key Optional API key. Defaults to an explicit argument, then
+#'   `WEBSTAT_API_KEY`, then the package fallback key.
 #' @param base_url Base API URL.
 #'
 #' @return A parsed facets response.

@@ -7,9 +7,12 @@
 \item{format}{Export format.}
 \item{where, select, order_by}{Optional ODSQL expressions.}
 \item{limit}{Number of records to export.}
-\item{api_key}{Optional Webstat API key.}
+\item{api_key}{Optional Webstat API key. Defaults to an explicit argument,
+then `WEBSTAT_API_KEY`, then the package fallback key.}
 \item{base_url}{Base API URL.}
 \item{...}{Additional query parameters.}
 }
 \value{A character URL.}
-\description{Build an export endpoint URL for CSV, JSON, XLSX, or Parquet.}
+\description{Build an export endpoint URL for CSV, JSON, XLSX, or Parquet.
+Export URLs include the key as an `apikey` query parameter because standalone
+URLs cannot carry custom HTTP headers.}

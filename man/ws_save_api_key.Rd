@@ -8,4 +8,7 @@
 \item{renviron}{Path to the `.Renviron` file.}
 }
 \value{The path to the updated `.Renviron` file, invisibly.}
-\description{Write `WEBSTAT_API_KEY` to the user-level `.Renviron` file so `r2webstat` can find it automatically when R starts.}
+\description{Write `WEBSTAT_API_KEY` to the user-level `.Renviron` file so
+`r2webstat` can find it automatically when R starts. This is optional because
+the package includes a public Webstat frontend key fallback, but a personal key
+can be useful when Webstat grants additional permissions to an account.}
