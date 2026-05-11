@@ -53,7 +53,7 @@ test_that("observations support data_only output", {
         results = list(list(
           series_key = "EXR.M.USD.EUR.SP00.A",
           time_period = "2024-12",
-          obs_value = "1.08",
+          obs_value = "1,08",
           obs_status = "A"
         ))
       )

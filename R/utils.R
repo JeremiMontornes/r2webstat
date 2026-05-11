@@ -153,7 +153,7 @@ observations_df <- function(records, data_only = FALSE, full = FALSE) {
     df$period <- parse_webstat_period(df$period)
   }
   if ("obs_value" %in% names(df)) {
-    df$obs_value <- suppressWarnings(as.numeric(df$obs_value))
+    df$obs_value <- parse_webstat_number(df$obs_value)
   }
 
   if (isTRUE(data_only)) {
@@ -190,6 +190,17 @@ parse_webstat_period <- function(x) {
   out[full_date] <- suppressWarnings(as.Date(x[full_date], format = "%Y-%m-%d"))
 
   out
+}
+
+parse_webstat_number <- function(x) {
+  if (is.numeric(x)) {
+    return(x)
+  }
+
+  x <- trimws(as.character(x))
+  x <- gsub("\\s", "", x)
+  x <- gsub(",", ".", x, fixed = TRUE)
+  suppressWarnings(as.numeric(x))
 }
 
 check_limit <- function(limit, maximum = NULL) {
