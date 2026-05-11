@@ -10,3 +10,9 @@
 }
 \value{A parsed dataset metadata list.}
 \description{Retrieve metadata and field structure for one dataset.}
+\examples{
+\dontrun{
+structure <- ws_structure("observations")
+names(structure)
+}
+}

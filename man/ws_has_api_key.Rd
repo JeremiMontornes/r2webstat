@@ -9,3 +9,7 @@ frontend key bundled for anonymous browser-style API calls.}
 \value{`TRUE` when a key is available for the current R session.}
 \description{Check whether a Webstat API key is available from the environment,
 the current R options, or the package fallback key.}
+\examples{
+ws_has_api_key()
+ws_has_api_key(include_builtin = FALSE)
+}

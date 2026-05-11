@@ -11,3 +11,9 @@
 }
 \value{A parsed facets response.}
 \description{List facet values for an Explore dataset.}
+\examples{
+\dontrun{
+facets <- ws_facets("series", facet = "dataset_id")
+facets
+}
+}

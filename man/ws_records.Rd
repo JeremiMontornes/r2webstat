@@ -18,3 +18,16 @@ then `WEBSTAT_API_KEY`, then the package fallback key.}
 \description{Query records from any accessible Huwise/Opendatasoft Explore
 dataset. Package requests send the key with an HTTP `Authorization: Apikey ...`
 header.}
+\examples{
+\dontrun{
+# Generic records endpoint wrapper
+records <- ws_records(
+  "series",
+  where = 'dataset_id:"FM"',
+  limit = 10
+)
+
+# Keep all flattened fields
+records_full <- ws_records("series", limit = 1, full = TRUE)
+}
+}

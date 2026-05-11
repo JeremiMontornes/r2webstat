@@ -14,3 +14,12 @@
 }
 \value{A data frame by default.}
 \description{Search series, datasets, or themes using the new Webstat Explore API.}
+\examples{
+\dontrun{
+# Search series metadata
+series_hits <- ws_search("Livret A", resource = "series", limit = 10)
+
+# Search dataset metadata
+dataset_hits <- ws_search("exchange rate", resource = "webstat-datasets")
+}
+}

@@ -20,3 +20,17 @@ instead.}
 }
 \value{A character URL.}
 \description{Build a Webstat Explore API URL with encoded query parameters.}
+\examples{
+ws_api_url(
+  "catalog/datasets/series/records",
+  query = list(limit = 10, where = 'series_key:"ABC"'),
+  api_key = "my-key",
+  base_url = "https://example.test/api"
+)
+
+ws_api_url(
+  "catalog/datasets/observations/records",
+  query = list(limit = 1),
+  include_api_key = FALSE
+)
+}

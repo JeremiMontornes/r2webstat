@@ -14,6 +14,14 @@ then `WEBSTAT_API_KEY`, then the package fallback key.}
 \item{base_url}{Base API URL.}
 }
 \value{A data frame by default.}
-\description{List records from the Webstat business dataset catalog. The
+\description{List records from the Webstat dataset catalog. The
 package includes a public Webstat frontend key fallback, so this usually works
 without user-side key configuration.}
+\examples{
+\dontrun{
+datasets <- ws_datasets(limit = 10)
+
+# Search dataset metadata
+exchange_rate_datasets <- ws_datasets(search = "exchange rate", lang = "en")
+}
+}

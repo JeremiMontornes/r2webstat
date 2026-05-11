@@ -12,3 +12,8 @@
 `r2webstat` can find it automatically when R starts. This is optional because
 the package includes a public Webstat frontend key fallback, but a personal key
 can be useful when Webstat grants additional permissions to an account.}
+\examples{
+tmp <- tempfile()
+ws_save_api_key("my-key", renviron = tmp)
+readLines(tmp)
+}

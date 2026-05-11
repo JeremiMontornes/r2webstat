@@ -16,3 +16,15 @@ then `WEBSTAT_API_KEY`, then the package fallback key.}
 \value{A data frame by default. Use `raw = TRUE` for the parsed API response.}
 \description{Query datasets available from the Webstat Explore catalog. Package
 requests send the key with an HTTP `Authorization: Apikey ...` header.}
+\examples{
+\dontrun{
+# Compact data frame of catalog metadata
+catalog <- ws_catalog(limit = 5)
+
+# Full flattened metadata, useful for discovery
+catalog_full <- ws_catalog(limit = 1, full = TRUE)
+
+# Parsed API response/list for advanced users
+catalog_raw <- ws_catalog(limit = 1, raw = TRUE)
+}
+}

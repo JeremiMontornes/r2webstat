@@ -16,3 +16,13 @@ then `WEBSTAT_API_KEY`, then the package fallback key.}
 \description{Build an export endpoint URL for CSV, JSON, XLSX, or Parquet.
 Export URLs include the key as an `apikey` query parameter because standalone
 URLs cannot carry custom HTTP headers.}
+\examples{
+ws_export_url(
+  "observations",
+  format = "csv",
+  where = 'series_key:"FM.D.U2.EUR.4F.KR.MRR_FR.LEV"',
+  limit = -1,
+  api_key = "my-key",
+  base_url = "https://example.test/api"
+)
+}

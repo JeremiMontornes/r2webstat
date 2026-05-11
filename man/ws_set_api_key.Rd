@@ -6,3 +6,13 @@
 \value{The previous value of `WEBSTAT_API_KEY`, invisibly.}
 \description{Set `WEBSTAT_API_KEY` for the current R session. This overrides
 the package fallback key until the R session ends.}
+\examples{
+old <- Sys.getenv("WEBSTAT_API_KEY", unset = NA_character_)
+ws_set_api_key("my-key")
+
+if (is.na(old)) {
+  Sys.unsetenv("WEBSTAT_API_KEY")
+} else {
+  Sys.setenv(WEBSTAT_API_KEY = old)
+}
+}

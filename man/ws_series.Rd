@@ -20,3 +20,15 @@ then `WEBSTAT_API_KEY`, then the package fallback key.}
 \description{Query metadata from the Webstat `series` dataset. The package
 includes a public Webstat frontend key fallback, so this usually works without
 user-side key configuration.}
+\examples{
+\dontrun{
+# Find series in one Webstat dataset
+series <- ws_series(dataset_id = "FM", limit = 10)
+
+# Retrieve one exact series
+livret_a <- ws_series(
+  series_key = "MIR1.M.FR.B.L23FRLA.D.R.A.2230U6.EUR.O",
+  limit = 1
+)
+}
+}

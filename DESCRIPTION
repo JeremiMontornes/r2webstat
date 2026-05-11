@@ -1,8 +1,8 @@
 Package: r2webstat
 Title: Client for the Banque de France Webstat API
 Version: 0.0.0.9000
-Authors@R:
-    person("Jeremi", "Montornes", email = "jeremi.montornes@example.com", role = c("aut", "cre"))
+Author: rwebstat, updated by Jeremi Montornes
+Maintainer: Jeremi Montornes <jeremi.montornes@gmail.com>
 Description: Access the redesigned Banque de France Webstat portal through
     its Huwise/Opendatasoft Explore API. The package provides helpers for
     catalog metadata, Webstat datasets, series metadata, observations, facets,

@@ -24,8 +24,18 @@ package includes a public Webstat frontend key fallback, so this usually works
 without user-side key configuration.}
 \examples{
 \dontrun{
+# Daily ECB main refinancing operations rate
 obs <- ws_observations(
   series_key = "FM.D.U2.EUR.4F.KR.MRR_FR.LEV",
+  start = "2010-01-01",
+  end = Sys.Date(),
+  all = TRUE,
+  data_only = TRUE
+)
+
+# Alias with the same arguments
+obs2 <- ws_data(
+  series_key = "MIR1.M.FR.B.L23FRLA.D.R.A.2230U6.EUR.O",
   start = "2010-01-01",
   end = Sys.Date(),
   all = TRUE,
