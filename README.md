@@ -41,13 +41,11 @@ library(ggplot2)
 obs <- ws_observations(
   series_key = "FM.D.U2.EUR.4F.KR.MRR_FR.LEV",
   start = "2010-01-01",
-  end = Sys.Date(),
-  all = TRUE,
-  data_only = TRUE
+  all = TRUE
 )
 
 ggplot(obs, aes(period, obs_value)) +
-  geom_line(linewidth = 0.8, colour = "#1f77b4") +
+  geom_line(linewidth = 0.8) +
   labs(
     title = "ECB main refinancing operations rate",
     x = NULL,

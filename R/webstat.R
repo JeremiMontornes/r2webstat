@@ -122,7 +122,8 @@ ws_series <- function(series_key = NULL, dataset_id = NULL, where = NULL,
 #' Query Webstat observations
 #'
 #' @param series_key One or more Webstat series keys.
-#' @param start,end Optional date bounds applied to `time_period_end`.
+#' @param start,end Optional date bounds applied to `time_period_end`. `end`
+#'   defaults to `Sys.Date()`.
 #' @param where Optional ODSQL where clause. Combined with filters.
 #' @param select Optional ODSQL select expression.
 #' @param order_by Ordering expression.
@@ -140,7 +141,7 @@ ws_series <- function(series_key = NULL, dataset_id = NULL, where = NULL,
 #'
 #' @return A data frame by default.
 #' @export
-ws_observations <- function(series_key = NULL, start = NULL, end = NULL,
+ws_observations <- function(series_key = NULL, start = NULL, end = Sys.Date(),
                             where = NULL, select = NULL,
                             order_by = "series_key,time_period_end",
                             limit = 100, offset = 0, all = FALSE,

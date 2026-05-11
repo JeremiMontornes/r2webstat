@@ -73,3 +73,22 @@ test_that("observations support data_only output", {
   expect_type(out$obs_value, "double")
   expect_equal(out$obs_value, 1.08)
 })
+
+test_that("observations default to the current date as end bound", {
+  seen_query <- NULL
+  local_mocked_bindings(
+    webstat_get = function(path, query = list(), api_key = NULL, base_url = NULL) {
+      seen_query <<- query
+      list(total_count = 0L, results = list())
+    }
+  )
+
+  ws_observations(
+    series_key = "FM.D.U2.EUR.4F.KR.MRR_FR.LEV",
+    start = "2010-01-01",
+    limit = 1
+  )
+
+  expect_match(seen_query$where, as.character(Sys.Date()), fixed = TRUE)
+  expect_match(seen_query$where, "time_period_end <=", fixed = TRUE)
+})

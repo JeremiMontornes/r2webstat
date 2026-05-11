@@ -2,10 +2,11 @@
 \alias{ws_observations}
 \alias{ws_data}
 \title{Query Webstat observations}
-\usage{ws_observations(series_key = NULL, start = NULL, end = NULL, where = NULL, select = NULL, order_by = "series_key,time_period_end", limit = 100, offset = 0, all = FALSE, data_only = FALSE, raw = FALSE, full = FALSE, api_key = NULL, base_url = webstat_base_url())}
+\usage{ws_observations(series_key = NULL, start = NULL, end = Sys.Date(), where = NULL, select = NULL, order_by = "series_key,time_period_end", limit = 100, offset = 0, all = FALSE, data_only = FALSE, raw = FALSE, full = FALSE, api_key = NULL, base_url = webstat_base_url())}
 \arguments{
 \item{series_key}{One or more Webstat series keys.}
-\item{start, end}{Optional date bounds applied to `time_period_end`.}
+\item{start, end}{Optional date bounds applied to `time_period_end`. `end`
+defaults to `Sys.Date()`.}
 \item{where, select, order_by}{Optional ODSQL expressions.}
 \item{limit}{Number of records to return.}
 \item{offset}{Pagination offset.}
@@ -28,18 +29,14 @@ without user-side key configuration.}
 obs <- ws_observations(
   series_key = "FM.D.U2.EUR.4F.KR.MRR_FR.LEV",
   start = "2010-01-01",
-  end = Sys.Date(),
-  all = TRUE,
-  data_only = TRUE
+  all = TRUE
 )
 
 # Alias with the same arguments
 obs2 <- ws_data(
   series_key = "MIR1.M.FR.B.L23FRLA.D.R.A.2230U6.EUR.O",
   start = "2010-01-01",
-  end = Sys.Date(),
-  all = TRUE,
-  data_only = TRUE
+  all = TRUE
 )
 }
 }
