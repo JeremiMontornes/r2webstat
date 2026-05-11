@@ -10,7 +10,6 @@ The package currently exposes:
 - `ws_records()` and `ws_structure()` for any accessible Explore dataset.
 - `ws_datasets()`, `ws_series()`, and `ws_observations()` for Webstat business datasets.
 - `ws_facets()` for facet exploration.
-- `ws_export_url()` for CSV, JSON, XLSX, and Parquet export URLs.
 
 Some Webstat business datasets, including `series`, `observations`, and
 `webstat-datasets`, require a Webstat API key. The official Webstat portal
@@ -44,35 +43,25 @@ ws_catalog(limit = 5)
 # Search series metadata
 series <- ws_series(dataset_id = "EXR", limit = 20)
 
-# Download observations for one or more series
+# Get the latest available observations for one or more series
 obs <- ws_observations(
   series_key = "EXR.M.USD.EUR.SP00.A",
-  start = "2020-01-01",
-  end = "2024-12-31",
-  all = TRUE
+  order_by = "time_period_end desc",
+  limit = 100,
+  data_only = TRUE
 )
 
-df <- data.frame(
-  date = as.Date(sapply(obs, \(x) x$time_period_end)),
-  value = as.numeric(sapply(obs, \(x) x$obs_value))
-)
+df <- obs[order(as.Date(obs$period)), ]
+df$obs_value <- as.numeric(df$obs_value)
 
-ggplot(df, aes(date, value)) +
+ggplot(df, aes(as.Date(period), obs_value)) +
   geom_line(linewidth = 0.8, colour = "#1f77b4") +
   labs(
-    title = "EXR.M.USD.EUR.SP00.A",
+    title = "Euro-dollar exchange rate",
     x = NULL,
     y = "USD per EUR"
   ) +
   theme_minimal()
-
-# Create an export URL
-url <- ws_export_url(
-  "observations",
-  format = "csv",
-  where = 'series_key:"EXR.M.USD.EUR.SP00.A"',
-  limit = -1
-)
 ```
 
 ![Example Webstat series](man/figures/exr_usd_eur.png)
@@ -82,11 +71,9 @@ url <- ws_export_url(
 The redesigned Webstat site uses the Explore v2.1 REST API under
 `https://webstat.banque-france.fr/api/explore/v2.1`. Query parameters use
 ODSQL (`where`, `select`, `group_by`, `order_by`, `refine`, `exclude`).
-The `records` endpoint is paginated and capped, while `exports` is the right
-path for large downloads. Normal package requests send the API key in the
-HTTP `Authorization` header, matching the official Webstat frontend; exported
-URLs can still include the key as an `apikey` query parameter because a URL
-cannot carry custom headers by itself.
+The `records` endpoint is paginated and capped. Normal package requests send
+the API key in the HTTP `Authorization` header, matching the official Webstat
+frontend.
 
 Official migration guide:
 <https://webstat.banque-france.fr/fr/pages/guide-migration-api/>

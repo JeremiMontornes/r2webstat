@@ -6,15 +6,18 @@
 #' @param limit Number of datasets to return.
 #' @param offset Pagination offset.
 #' @param all If `TRUE`, page through all accessible results.
+#' @param raw If `TRUE`, return the parsed API response/list.
+#' @param full If `TRUE`, return all flattened columns. The default keeps the
+#'   most useful catalog fields.
 #' @param api_key Optional API key. Defaults to an explicit argument, then
 #'   `WEBSTAT_API_KEY`, then the package fallback key.
 #' @param base_url Base API URL.
 #'
-#' @return A parsed list returned by the Webstat API, or a list of results
-#'   when `all = TRUE`.
+#' @return A data frame by default. Use `raw = TRUE` for the parsed API response.
 #' @export
 ws_catalog <- function(where = NULL, select = NULL, order_by = NULL,
-                       limit = 20, offset = 0, all = FALSE, api_key = NULL,
+                       limit = 20, offset = 0, all = FALSE, raw = FALSE,
+                       full = FALSE, api_key = NULL,
                        base_url = webstat_base_url()) {
   query <- list(
     where = where,
@@ -25,12 +28,20 @@ ws_catalog <- function(where = NULL, select = NULL, order_by = NULL,
   )
 
   if (isTRUE(all)) {
-    return(webstat_get_all("catalog/datasets", query = query, api_key = api_key,
-                           base_url = base_url))
+    records <- webstat_get_all("catalog/datasets", query = query, api_key = api_key,
+                               base_url = base_url)
+    if (isTRUE(raw)) {
+      return(records)
+    }
+    return(catalog_df(records, full = full))
   }
 
-  webstat_get("catalog/datasets", query = query, api_key = api_key,
-              base_url = base_url)
+  response <- webstat_get("catalog/datasets", query = query, api_key = api_key,
+                          base_url = base_url)
+  if (isTRUE(raw)) {
+    return(response)
+  }
+  catalog_df(response, full = full)
 }
 
 #' Query records from any Webstat Explore dataset
@@ -46,17 +57,19 @@ ws_catalog <- function(where = NULL, select = NULL, order_by = NULL,
 #'   limited to 100 records per page.
 #' @param offset Pagination offset.
 #' @param all If `TRUE`, page through all accessible records.
+#' @param raw If `TRUE`, return the parsed API response/list.
+#' @param full If `TRUE`, return all flattened columns.
 #' @param api_key Optional API key. Defaults to an explicit argument, then
 #'   `WEBSTAT_API_KEY`, then the package fallback key.
 #' @param base_url Base API URL.
 #'
-#' @return A parsed list returned by the Webstat API, or a list of records
-#'   when `all = TRUE`.
+#' @return A flattened data frame by default. Use `raw = TRUE` for the parsed
+#'   API response.
 #' @export
 ws_records <- function(dataset_id, where = NULL, select = NULL, refine = NULL,
                        exclude = NULL, group_by = NULL, order_by = NULL,
-                       limit = 100, offset = 0, all = FALSE, api_key = NULL,
-                       base_url = webstat_base_url()) {
+                       limit = 100, offset = 0, all = FALSE, raw = FALSE,
+                       full = FALSE, api_key = NULL, base_url = webstat_base_url()) {
   stopifnot(is.character(dataset_id), length(dataset_id) == 1, nzchar(dataset_id))
   path <- paste0("catalog/datasets/", dataset_id, "/records")
   query <- list(
@@ -71,11 +84,19 @@ ws_records <- function(dataset_id, where = NULL, select = NULL, refine = NULL,
   )
 
   if (isTRUE(all)) {
-    return(webstat_get_all(path, query = query, api_key = api_key,
-                           base_url = base_url))
+    records <- webstat_get_all(path, query = query, api_key = api_key,
+                               base_url = base_url)
+    if (isTRUE(raw)) {
+      return(records)
+    }
+    return(as_flat_df(records))
   }
 
-  webstat_get(path, query = query, api_key = api_key, base_url = base_url)
+  response <- webstat_get(path, query = query, api_key = api_key, base_url = base_url)
+  if (isTRUE(raw)) {
+    return(response)
+  }
+  as_flat_df(response)
 }
 
 #' Get metadata for a Webstat Explore dataset
