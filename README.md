@@ -8,10 +8,10 @@ The package currently exposes:
 
 - `ws_catalog()` for the public Explore catalog.
 - `ws_records()` and `ws_structure()` for any accessible Explore dataset.
-- `ws_datasets()`, `ws_series()`, and `ws_observations()` for Webstat business datasets.
+- `ws_datasets()`, `ws_series()`, and `ws_observations()` for Webstat datasets.
 - `ws_facets()` for facet exploration.
 
-Some Webstat business datasets, including `series`, `observations`, and
+Some Webstat datasets, including `series`, `observations`, and
 `webstat-datasets`, require a Webstat API key. The official Webstat portal
 uses an `Authorization: Apikey ...` header for browser API calls; `r2webstat`
 bundles that public frontend key as a fallback so most users do not need to
@@ -37,34 +37,26 @@ library(ggplot2)
 # Optional: use your own key instead of the package fallback
 # ws_save_api_key("your-api-key")
 
-# Explore catalog visible to your key/session
-ws_catalog(limit = 5)
-
-# Search series metadata
-series <- ws_series(dataset_id = "EXR", limit = 20)
-
-# Get the latest available observations for one or more series
+# Get observations up to the latest available date
 obs <- ws_observations(
-  series_key = "EXR.M.USD.EUR.SP00.A",
-  order_by = "time_period_end desc",
-  limit = 100,
+  series_key = "FM.D.U2.EUR.4F.KR.MRR_FR.LEV",
+  start = "2010-01-01",
+  end = Sys.Date(),
+  all = TRUE,
   data_only = TRUE
 )
 
-df <- obs[order(as.Date(obs$period)), ]
-df$obs_value <- as.numeric(df$obs_value)
-
-ggplot(df, aes(as.Date(period), obs_value)) +
+ggplot(obs, aes(period, obs_value)) +
   geom_line(linewidth = 0.8, colour = "#1f77b4") +
   labs(
-    title = "Euro-dollar exchange rate",
+    title = "ECB main refinancing operations rate",
     x = NULL,
-    y = "USD per EUR"
+    y = "Percent"
   ) +
   theme_minimal()
 ```
 
-![Example Webstat series](man/figures/exr_usd_eur.png)
+![Example Webstat series](man/figures/ecb_mrr.png)
 
 ## Notes on the new Webstat API
 

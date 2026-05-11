@@ -149,8 +149,21 @@ observations_df <- function(records, data_only = FALSE, full = FALSE) {
     df$obs_value <- df$value
   }
 
+  if ("period" %in% names(df)) {
+    df$period <- parse_webstat_period(df$period)
+  }
+  if ("obs_value" %in% names(df)) {
+    df$obs_value <- suppressWarnings(as.numeric(df$obs_value))
+  }
+
   if (isTRUE(data_only)) {
-    return(select_columns(df, c("serie_key", "series_key", "period", "obs_value")))
+    out <- select_columns(df, c("serie_key", "series_key", "period", "obs_value"))
+    order_cols <- intersect(c("serie_key", "series_key", "period"), names(out))
+    if (length(order_cols) > 0L) {
+      out <- out[do.call(order, out[order_cols]), , drop = FALSE]
+      row.names(out) <- NULL
+    }
+    return(out)
   }
 
   if (isTRUE(full)) {
@@ -161,6 +174,22 @@ observations_df <- function(records, data_only = FALSE, full = FALSE) {
     "dataset_id", "serie_key", "series_key", "period",
     "time_period_start", "time_period_end", "obs_value", "obs_status"
   ))
+}
+
+parse_webstat_period <- function(x) {
+  x <- as.character(x)
+  out <- rep(as.Date(NA), length(x))
+
+  year_month <- grepl("^\\d{4}-\\d{2}$", x)
+  out[year_month] <- as.Date(paste0(x[year_month], "-01"), format = "%Y-%m-%d")
+
+  year_only <- grepl("^\\d{4}$", x)
+  out[year_only] <- as.Date(paste0(x[year_only], "-01-01"), format = "%Y-%m-%d")
+
+  full_date <- !year_month & !year_only
+  out[full_date] <- suppressWarnings(as.Date(x[full_date], format = "%Y-%m-%d"))
+
+  out
 }
 
 check_limit <- function(limit, maximum = NULL) {

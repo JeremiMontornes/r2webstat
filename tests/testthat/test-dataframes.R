@@ -52,7 +52,7 @@ test_that("observations support data_only output", {
         total_count = 1L,
         results = list(list(
           series_key = "EXR.M.USD.EUR.SP00.A",
-          time_period_end = "2024-12-31",
+          time_period = "2024-12",
           obs_value = "1.08",
           obs_status = "A"
         ))
@@ -68,5 +68,8 @@ test_that("observations support data_only output", {
 
   expect_s3_class(out, "data.frame")
   expect_named(out, c("series_key", "period", "obs_value"))
-  expect_equal(out$period, "2024-12-31")
+  expect_s3_class(out$period, "Date")
+  expect_equal(out$period, as.Date("2024-12-01"))
+  expect_type(out$obs_value, "double")
+  expect_equal(out$obs_value, 1.08)
 })

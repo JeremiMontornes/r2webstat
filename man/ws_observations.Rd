@@ -10,7 +10,8 @@
 \item{limit}{Number of records to return.}
 \item{offset}{Pagination offset.}
 \item{all}{Page through all accessible records.}
-\item{data_only}{Return only `series_key`, `period`, and `obs_value` when available.}
+\item{data_only}{Return only `series_key`, `period`, and `obs_value` when
+available. `period` is parsed as a Date and `obs_value` as numeric.}
 \item{raw}{Return the parsed API response/list instead of a data frame.}
 \item{full}{Return all flattened columns. Ignored when `data_only = TRUE`.}
 \item{api_key}{Optional Webstat API key. Defaults to an explicit argument,
@@ -24,9 +25,10 @@ without user-side key configuration.}
 \examples{
 \dontrun{
 obs <- ws_observations(
-  series_key = "EXR.M.USD.EUR.SP00.A",
-  order_by = "time_period_end desc",
-  limit = 100,
+  series_key = "FM.D.U2.EUR.4F.KR.MRR_FR.LEV",
+  start = "2010-01-01",
+  end = Sys.Date(),
+  all = TRUE,
   data_only = TRUE
 )
 }
