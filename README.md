@@ -47,9 +47,9 @@ obs <- ws_observations(
 ggplot(obs, aes(period, obs_value)) +
   geom_line(linewidth = 0.8) +
   labs(
-    title = "ECB main refinancing operations rate",
+    title = "ECB main refinancing operations rate (in %)",
     x = NULL,
-    y = "Percent"
+    y = ""
   ) +
   theme_minimal()
 ```
